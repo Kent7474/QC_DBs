@@ -115,7 +115,6 @@ class OpenWorks:
 
     # Busca en todos los campos el 'data'
     def likelyWells(self, field, data, base, lista):
-
         with open(base, 'r') as arch:
             for line in arch:
                 found = False
@@ -123,6 +122,4 @@ class OpenWorks:
                     if data == line.split(';')[i] and not found:
                         lista.append(line.split(';')[1:6])
                         i = 10000
-# prueba para git
-# prueba para gitHub
 
