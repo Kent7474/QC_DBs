@@ -163,18 +163,20 @@ class Surface:
             self.msgAltTop = Label(rightFrameAlt, text='SERVIDOR DE BSAS', fg='green')
             self.msgAltTop.grid(row=0, column=0, sticky=N)
 
-            self.tree_alt_TOP = ttk.Treeview(rightFrameAlt, show='headings', height=10, column=4, selectmode='browse')
+            self.tree_alt_TOP = ttk.Treeview(rightFrameAlt, show='headings', height=10, column=6, selectmode='browse')
             self.tree_alt_TOP.grid(row=1, column=0, rowspan=10, pady=10, sticky=N)
             vsbAltTOP = ttk.Scrollbar(rightFrameAlt, orient="vertical", command=self.tree_alt_TOP.yview)
             vsbAltTOP.grid(row=1, column=2, sticky=N + S + E + W, rowspan=20)
             self.tree_alt_TOP.configure(yscrollcommand=vsbAltTOP.set)
 
-            self.tree_alt_TOP["columns"] = ("one", "two", "three", "four", "five")
+            self.tree_alt_TOP["columns"] = ("zero", "one", "two", "three", "four", "five")
+            self.tree_alt_TOP.column("zero", width=40)
             self.tree_alt_TOP.column("one", width=140)
             self.tree_alt_TOP.column("two", width=140)
             self.tree_alt_TOP.column("three", width=140)
             self.tree_alt_TOP.column("four", width=140)
             self.tree_alt_TOP.column("five", width=140)
+            self.tree_alt_TOP.heading("zero", text='ID', anchor=N)
             self.tree_alt_TOP.heading("one", text='UWI', anchor=N)
             self.tree_alt_TOP.heading("two", text='WELL_LOCATION_UWI', anchor=N)
             self.tree_alt_TOP.heading("three", text='WELL_UWI_TYPE', anchor=N)
@@ -186,18 +188,20 @@ class Surface:
             self.msgAltBot = Label(rightFrameAlt, text='SERVIDOR DE NQN', fg='blue')
             self.msgAltBot.grid(row=13, column=0, sticky=N)
 
-            self.tree_alt_BOT = ttk.Treeview(rightFrameAlt, show='headings', height=10, column=4, selectmode='browse')
+            self.tree_alt_BOT = ttk.Treeview(rightFrameAlt, show='headings', height=10, column=6, selectmode='browse')
             self.tree_alt_BOT.grid(row=14, column=0, rowspan=10, pady=10, sticky=N)
             vsbAltBOT = ttk.Scrollbar(rightFrameAlt, orient="vertical", command=self.tree_alt_BOT.yview)
             vsbAltBOT.grid(row=14, column=2, sticky=N + S + E + W, rowspan=20)
             self.tree_alt_BOT.configure(yscrollcommand=vsbAltBOT.set)
 
-            self.tree_alt_BOT["columns"] = ("one", "two", "three", "four", "five")
+            self.tree_alt_BOT["columns"] = ("zero", "one", "two", "three", "four", "five")
+            self.tree_alt_BOT.column("zero", width=40)
             self.tree_alt_BOT.column("one", width=140)
             self.tree_alt_BOT.column("two", width=140)
             self.tree_alt_BOT.column("three", width=140)
             self.tree_alt_BOT.column("four", width=140)
             self.tree_alt_BOT.column("five", width=140)
+            self.tree_alt_BOT.heading("zero", text='ID', anchor=N)
             self.tree_alt_BOT.heading("one", text='UWI', anchor=N)
             self.tree_alt_BOT.heading("two", text='WELL_LOCATION_UWI', anchor=N)
             self.tree_alt_BOT.heading("three", text='WELL_UWI_TYPE', anchor=N)
@@ -233,11 +237,23 @@ class Surface:
         bsasList = []
         nqnList = []
 
-        self.openworks.likelyWells(str(selection), str(valueWell), self.openworks.RESULT_BSAS, bsasList)
-        self.openworks.likelyWells(str(selection), str(valueWell), self.openworks.RESULT_NQN, nqnList)
+        self.openworks.likelyWells(str(valueWell), self.openworks.ARCH_BSAS, bsasList)
+        self.openworks.likelyWells(str(valueWell), self.openworks.ARCH_NQN, nqnList)
 
-        print(selection)
-        print(valueWell)
+        for x in bsasList:
+            try:
+                self.tree_alt_TOP.insert("", END, text="", values=(x[0], x[1], x[2], x[3], x[4], x[5]))
+            except IndexError:
+                print ("ERROR en el tree_alt_TOP.insert")
+
+        for z in nqnList:
+            try:
+                self.tree_alt_BOT.insert("", END, text="", values=(z[0], z[1], z[2], z[3], z[4], z[5]))
+            except IndexError:
+                print("ERROR en el tree_alt_BOT.insert")
+
+        print('Campo Seleccionado: ' + selection)
+        print('Campo Value: ' + valueWell)
         print('lista bsas:', bsasList)
         print('lista nqn :', nqnList)
 

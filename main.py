@@ -114,12 +114,14 @@ class OpenWorks:
         print(' Exportado a Base de Datos')
 
     # Busca en todos los campos el 'data'
-    def likelyWells(self, field, data, base, lista):
-        with open(base, 'r') as arch:
-            for line in arch:
-                found = False
-                for i in range(1, 6):
-                    if data == line.split(';')[i] and not found:
-                        lista.append(line.split(';')[1:6])
-                        i = 10000
+    def likelyWells(self, data, base, lista):
+        with open(base, 'r', encoding='utf-8') as arch:
+            try:
+                for line in arch:
+                    for i in range(1, 6):
+                        if data == line.split(';')[i]:
+                            lista.append(line.split(';')[0:6])
+                            break
+            except UnicodeDecodeError:
+                print('utf-8 error...')
 
