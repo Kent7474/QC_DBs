@@ -133,7 +133,7 @@ class Surface:
 
             # -----------------------------------##
             # ------ LEFT FRAME ---------------##
-
+            # -----------------------------------##
             leftFrameAlt = Frame(self.altWind, width=400, height=600)
             leftFrameAlt.grid(row=0, column=0, padx=10, pady=5, sticky=N)
             Label(leftFrameAlt, text="Seleccionar tipo de dato para buscar alternativas de pozos").grid(row=1, column=0,
@@ -150,11 +150,19 @@ class Surface:
             searchAlt = ttk.Button(leftFrameAlt, text='Search... ', width=15, command=self.searchAlternative)
             searchAlt.grid(row=2, column=0, sticky=E)
 
-            self.fieldWell = Label(leftFrameAlt, text='', fg='red')
+            self.fieldWell = Label(leftFrameAlt, text='', fg='blue')
             self.fieldWell.grid(row=3, column=0, sticky=W, pady=10)
+
+            # busqueda por Entry
+            self.searchEntry = Entry(leftFrameAlt, textvariable='busqueda manual', state=NORMAL, width=20)
+            self.searchEntry.grid(row=4, column=0, sticky=W, pady=10)
+
+            self.searchBtn = ttk.Button(leftFrameAlt, text='Manual Search', width=20, command=self.manual_search_entry)
+            self.searchBtn.grid(row=4, column=0, sticky=E)
 
             # -----------------------------------##
             # ------ RIGHT FRAME ---------------##
+            # -----------------------------------##
             rightFrameAlt = Frame(self.altWind, width=400, height=600)
             rightFrameAlt.grid(row=0, column=1, padx=10, pady=5)
 
@@ -165,8 +173,11 @@ class Surface:
 
             self.tree_alt_TOP = ttk.Treeview(rightFrameAlt, show='headings', height=10, column=6, selectmode='browse')
             self.tree_alt_TOP.grid(row=1, column=0, rowspan=10, pady=10, sticky=N)
+            # BIND Funcion al hacer click en el campo del treeview
+            self.tree_alt_TOP.bind('<<TreeviewSelect>>', self.click_function_select_treeTOP)
+
             vsbAltTOP = ttk.Scrollbar(rightFrameAlt, orient="vertical", command=self.tree_alt_TOP.yview)
-            vsbAltTOP.grid(row=1, column=2, sticky=N + S + E + W, rowspan=20)
+            vsbAltTOP.grid(row=1, column=2, sticky=N + S + E + W, rowspan=10)
             self.tree_alt_TOP.configure(yscrollcommand=vsbAltTOP.set)
 
             self.tree_alt_TOP["columns"] = ("zero", "one", "two", "three", "four", "five")
@@ -190,8 +201,11 @@ class Surface:
 
             self.tree_alt_BOT = ttk.Treeview(rightFrameAlt, show='headings', height=10, column=6, selectmode='browse')
             self.tree_alt_BOT.grid(row=14, column=0, rowspan=10, pady=10, sticky=N)
+            # BIND Funcion al hacer click en el campo del treeview
+            self.tree_alt_BOT.bind('<<TreeviewSelect>>', self.click_function_select_treeBOT)
+
             vsbAltBOT = ttk.Scrollbar(rightFrameAlt, orient="vertical", command=self.tree_alt_BOT.yview)
-            vsbAltBOT.grid(row=14, column=2, sticky=N + S + E + W, rowspan=20)
+            vsbAltBOT.grid(row=14, column=2, sticky=N + S + E + W, rowspan=10)
             self.tree_alt_BOT.configure(yscrollcommand=vsbAltBOT.set)
 
             self.tree_alt_BOT["columns"] = ("zero", "one", "two", "three", "four", "five")
@@ -222,6 +236,10 @@ class Surface:
         for item in x:
             tree.delete(item)
 
+    def manual_search_entry(self):
+        value = self.searchEntry.get()
+        print('Value.  ' + value)
+
     def searchAlternative(self):
         # limpiar los 2 trees antes de completar
         self.clearTreeAltDiag(self.tree_alt_TOP)
@@ -244,7 +262,7 @@ class Surface:
             try:
                 self.tree_alt_TOP.insert("", END, text="", values=(x[0], x[1], x[2], x[3], x[4], x[5]))
             except IndexError:
-                print ("ERROR en el tree_alt_TOP.insert")
+                print("ERROR en el tree_alt_TOP.insert")
 
         for z in nqnList:
             try:
@@ -256,6 +274,15 @@ class Surface:
         print('Campo Value: ' + valueWell)
         print('lista bsas:', bsasList)
         print('lista nqn :', nqnList)
+
+    # Funcion al hacer click en el campo del treeview
+    def click_function_select_treeTOP(self, event):
+        item = self.tree_alt_TOP.item(self.tree_alt_TOP.selection())['values']
+        print('Seleccion del campo de tree !!!!', item)
+
+    def click_function_select_treeBOT(self, event):
+        item = self.tree_alt_BOT.item(self.tree_alt_BOT.selection())['values']
+        print('Seleccion del campo de tree !!!!', item)
 
     def __myStr_results(self):
         # Asigna variables para mostrar en los Entry
