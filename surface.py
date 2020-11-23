@@ -160,6 +160,12 @@ class Surface:
             self.searchBtn = ttk.Button(leftFrameAlt, text='Manual Search', width=20, command=self.manual_search_entry)
             self.searchBtn.grid(row=4, column=0, sticky=E)
 
+            # Clean Button
+
+            self.clearTreeAltBtn = ttk.Button(leftFrameAlt, text='Clear', width=15,
+                                              command=lambda: (self.clearTreeAltDiag(self.tree_alt_TOP), self.clearTreeAltDiag(self.tree_alt_BOT)))
+            self.clearTreeAltBtn.grid(row=10, column=0, sticky=S+W, pady=20)
+
             # -----------------------------------##
             # ------ RIGHT FRAME ---------------##
             # -----------------------------------##
@@ -237,8 +243,30 @@ class Surface:
             tree.delete(item)
 
     def manual_search_entry(self):
+
+        self.clearTreeAltDiag(self.tree_alt_TOP)
+        self.clearTreeAltDiag(self.tree_alt_BOT)
+
         value = self.searchEntry.get()
         print('Value.  ' + value)
+
+        manual_bsasList = []
+        manual_nqnList = []
+
+        self.openworks.likelyWells(str(value), self.openworks.ARCH_BSAS, manual_bsasList)
+        self.openworks.likelyWells(str(value), self.openworks.ARCH_NQN, manual_nqnList)
+
+        for x in manual_bsasList:
+            try:
+                self.tree_alt_TOP.insert("", END, text="", values=(x[0], x[1], x[2], x[3], x[4], x[5]))
+            except IndexError:
+                print("ERROR en el tree_alt_TOP.insert")
+
+        for z in manual_nqnList:
+            try:
+                self.tree_alt_BOT.insert("", END, text="", values=(z[0], z[1], z[2], z[3], z[4], z[5]))
+            except IndexError:
+                print("ERROR en el tree_alt_BOT.insert")
 
     def searchAlternative(self):
         # limpiar los 2 trees antes de completar

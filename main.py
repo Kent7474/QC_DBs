@@ -119,7 +119,7 @@ class OpenWorks:
             try:
                 for line in arch:
                     for i in range(1, 6):
-                        if data == line.split(';')[i]:
+                        if data.lower() in line.split(';')[i].lower():
                             lista.append(line.split(';')[0:6])
                             break
             except UnicodeDecodeError:
