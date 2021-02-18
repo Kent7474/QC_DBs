@@ -391,7 +391,7 @@ class Surface:
             self.msg["text"] = "Datos del Servidor de BSAS que faltan o se repiten en Neuquen"
             self.msg["fg"] = "blue"
         else:
-            self.msg["text"] = "No existe el archivo RESULTADOS de BSAS"
+            self.msg["text"] = "No existe el archivo RESULTADOS de NQN"
 
     def addWellsToDB(self):
         try:
